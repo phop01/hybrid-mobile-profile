@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   header: {
-    height: 180,
+    height: 140,
     backgroundColor: HEADER_COLOR,
     borderBottomLeftRadius: 32,
     borderBottomRightRadius: 32,
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   avatarWrapper: {
     alignItems: 'center',
-    marginTop: -(AVATAR_SIZE / 2) - 20,
+    marginTop: -(AVATAR_SIZE / 2) - 10,
   },
   avatar: {
     width: AVATAR_SIZE,
@@ -171,8 +171,8 @@ const styles = StyleSheet.create({
   body: {
     alignItems: 'center',
     paddingHorizontal: 24,
-    paddingTop: 12,
-    paddingBottom: 40,
+    paddingTop: 8,
+    paddingBottom: 24,
   },
   nameTh: {
     fontSize: 24,
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 999,
-    marginTop: 14,
+    marginTop: 8,
   },
   idPillText: {
     fontSize: 14,
@@ -199,9 +199,9 @@ const styles = StyleSheet.create({
   infoCard: {
     width: '100%',
     borderRadius: 20,
-    padding: 18,
-    marginTop: 24,
-    gap: 14,
+    padding: 16,
+    marginTop: 16,
+    gap: 10,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
   infoRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 12,
+    gap: 10,
   },
   infoTextWrapper: {
     flex: 1,
@@ -238,13 +238,13 @@ const styles = StyleSheet.create({
   contactTitle: {
     fontSize: 16,
     fontWeight: '600',
-    marginTop: 28,
+    marginTop: 18,
     alignSelf: 'flex-start',
   },
   contactRow: {
     flexDirection: 'row',
-    gap: 20,
-    marginTop: 14,
+    gap: 16,
+    marginTop: 10,
   },
   contactButton: {
     alignItems: 'center',
