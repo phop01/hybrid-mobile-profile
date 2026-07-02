@@ -42,13 +42,13 @@ const CONTACTS: {
   {
     icon: "logo-github",
     label: "GitHub",
-    url: "https://github.com/",
+    url: "https://github.com/phop01",
     color: "#181717",
   },
   {
     icon: "logo-facebook",
     label: "Facebook",
-    url: "https://facebook.com/",
+    url: "https://www.facebook.com/paphop57/?locale=th_TH",
     color: "#1877F2",
   },
 ];
