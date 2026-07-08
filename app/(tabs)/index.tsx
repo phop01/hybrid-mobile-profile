@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { useVideoPlayer, VideoView } from "expo-video";
 import {
   Linking,
   Platform,
@@ -26,6 +27,9 @@ const PROFILE = {
 
 // ใส่รูปโปรไฟล์ของคุณที่ไฟล์: assets/images/profile.png (แทนที่ไฟล์ placeholder เดิมได้เลย)
 const PROFILE_IMAGE = require("@/assets/images/profile.png");
+
+// วิดีโอพื้นหลังหน้าเว็บ (พื้นที่นอกกรอบการ์ด): assets/videos/background.mp4
+const PAGE_VIDEO = require("@/assets/videos/background.mp4");
 
 const CONTACTS: {
   icon: keyof typeof Ionicons.glyphMap;
@@ -64,17 +68,35 @@ export default function ProfileScreen() {
   const cardBackground = colorScheme === "dark" ? "#1E2226" : "#FFFFFF";
   const pillBackground = colorScheme === "dark" ? "#26313A" : "#E6F3F8";
   const pageBackground = colorScheme === "dark" ? "#0F1417" : "#E9EEF1";
+  const sectionBackground = colorScheme === "dark" ? "#262B2F" : "#F2F7F9";
   const infoBorderColor =
-    colorScheme === "dark" ? "rgba(255,255,255,0.08)" : "rgba(11,110,143,0.12)";
+    colorScheme === "dark" ? "rgba(255,255,255,0.06)" : "rgba(11,110,143,0.1)";
 
   const handleContactPress = (url: string) => {
     Linking.openURL(url).catch(() => {});
   };
 
+  const pageVideoPlayer = useVideoPlayer(PAGE_VIDEO, (player) => {
+    player.loop = true;
+    player.muted = true;
+    player.play();
+  });
+
   return (
     <ThemedView
       style={[styles.container, isWideWeb && { backgroundColor: pageBackground }]}
     >
+      {isWideWeb && (
+        <>
+          <VideoView
+            player={pageVideoPlayer}
+            style={[StyleSheet.absoluteFill, styles.pageVideo]}
+            contentFit="cover"
+            nativeControls={false}
+          />
+          <View style={styles.pageOverlay} />
+        </>
+      )}
       <SafeAreaView style={styles.flex} edges={["top"]}>
         <ScrollView
           style={styles.scroll}
@@ -117,7 +139,12 @@ export default function ProfileScreen() {
                 </ThemedText>
               </View>
 
-              <View style={[styles.infoCard, { borderColor: infoBorderColor }]}>
+              <View
+                style={[
+                  styles.infoCard,
+                  { backgroundColor: sectionBackground, borderColor: infoBorderColor },
+                ]}
+              >
                 <View style={styles.infoRow}>
                   <Ionicons
                     name="school-outline"
@@ -152,30 +179,37 @@ export default function ProfileScreen() {
                 </View>
               </View>
 
-              <ThemedText style={styles.contactTitle}>ติดต่อฉัน</ThemedText>
-              <View style={styles.contactRow}>
-                {CONTACTS.map((contact) => (
-                  <Pressable
-                    key={contact.label}
-                    style={({ pressed }) => [
-                      styles.contactButton,
-                      pressed && styles.contactButtonPressed,
-                    ]}
-                    onPress={() => handleContactPress(contact.url)}
-                  >
-                    <View
-                      style={[
-                        styles.contactIconCircle,
-                        { backgroundColor: contact.color },
+              <View
+                style={[
+                  styles.contactCard,
+                  { backgroundColor: sectionBackground, borderColor: infoBorderColor },
+                ]}
+              >
+                <ThemedText style={styles.contactTitle}>ติดต่อฉัน</ThemedText>
+                <View style={styles.contactRow}>
+                  {CONTACTS.map((contact) => (
+                    <Pressable
+                      key={contact.label}
+                      style={({ pressed }) => [
+                        styles.contactButton,
+                        pressed && styles.contactButtonPressed,
                       ]}
+                      onPress={() => handleContactPress(contact.url)}
                     >
-                      <Ionicons name={contact.icon} size={22} color="#fff" />
-                    </View>
-                    <ThemedText style={styles.contactLabel}>
-                      {contact.label}
-                    </ThemedText>
-                  </Pressable>
-                ))}
+                      <View
+                        style={[
+                          styles.contactIconCircle,
+                          { backgroundColor: contact.color },
+                        ]}
+                      >
+                        <Ionicons name={contact.icon} size={22} color="#fff" />
+                      </View>
+                      <ThemedText style={styles.contactLabel}>
+                        {contact.label}
+                      </ThemedText>
+                    </Pressable>
+                  ))}
+                </View>
               </View>
             </View>
           </View>
@@ -214,6 +248,15 @@ const styles = StyleSheet.create({
         boxShadow: "0 12px 32px rgba(11, 34, 45, 0.16)",
       },
     }),
+  },
+  pageVideo: {
+    width: "100%",
+    height: "100%",
+    pointerEvents: "none",
+  },
+  pageOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(11, 34, 45, 0.25)",
   },
   header: {
     height: 140,
@@ -318,16 +361,22 @@ const styles = StyleSheet.create({
     height: StyleSheet.hairlineWidth,
     backgroundColor: "rgba(128,128,128,0.3)",
   },
+  contactCard: {
+    width: "100%",
+    borderRadius: 20,
+    borderWidth: 1,
+    padding: 16,
+    marginTop: 16,
+  },
   contactTitle: {
     fontSize: 16,
     fontWeight: "600",
-    marginTop: 18,
     alignSelf: "flex-start",
   },
   contactRow: {
     flexDirection: "row",
     gap: 16,
-    marginTop: 10,
+    marginTop: 14,
   },
   contactButton: {
     alignItems: "center",
@@ -342,6 +391,17 @@ const styles = StyleSheet.create({
     borderRadius: 26,
     alignItems: "center",
     justifyContent: "center",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
   },
   contactLabel: {
     fontSize: 12,
