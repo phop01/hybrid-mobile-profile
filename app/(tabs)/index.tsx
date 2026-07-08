@@ -27,6 +27,12 @@ const PROFILE = {
 // ใส่รูปโปรไฟล์ของคุณที่ไฟล์: assets/images/profile.png (แทนที่ไฟล์ placeholder เดิมได้เลย)
 const PROFILE_IMAGE = require("@/assets/images/profile.png");
 
+// พื้นหลังนอกกรอบการ์ด (เห็นเฉพาะตอนเปิดจากเว็บจอกว้าง): assets/images/page-background-web.jpg
+const PAGE_BACKGROUND_IMAGE = require("@/assets/images/page-background-web.jpg");
+
+// พื้นหลัง header ด้านบน (ใช้ทั้งเว็บและมือถือ): assets/images/header-background.gif
+const HEADER_BACKGROUND_IMAGE = require("@/assets/images/header-background.gif");
+
 const CONTACTS: {
   icon: keyof typeof Ionicons.glyphMap;
   label: string;
@@ -75,6 +81,16 @@ export default function ProfileScreen() {
     <ThemedView
       style={[styles.container, isWideWeb && { backgroundColor: pageBackground }]}
     >
+      {isWideWeb && (
+        <>
+          <Image
+            source={PAGE_BACKGROUND_IMAGE}
+            style={StyleSheet.absoluteFill}
+            contentFit="cover"
+          />
+          <View style={styles.pageOverlay} />
+        </>
+      )}
       <SafeAreaView style={styles.flex} edges={["top"]}>
         <ScrollView
           style={styles.scroll}
@@ -88,8 +104,12 @@ export default function ProfileScreen() {
             ]}
           >
             <View style={styles.header}>
-              <View style={[styles.headerCircle, styles.headerCircleLarge]} />
-              <View style={[styles.headerCircle, styles.headerCircleSmall]} />
+              <Image
+                source={HEADER_BACKGROUND_IMAGE}
+                style={StyleSheet.absoluteFill}
+                contentFit="cover"
+              />
+              <View style={styles.headerOverlay} />
             </View>
 
             <View style={styles.avatarWrapper}>
@@ -201,6 +221,10 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: "center",
   },
+  pageOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(11, 34, 45, 0.25)",
+  },
   card: {
     width: "100%",
     maxWidth: 480,
@@ -222,22 +246,9 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 32,
     overflow: "hidden",
   },
-  headerCircle: {
-    position: "absolute",
-    borderRadius: 999,
-    backgroundColor: "rgba(255,255,255,0.12)",
-  },
-  headerCircleLarge: {
-    width: 220,
-    height: 220,
-    top: -80,
-    right: -60,
-  },
-  headerCircleSmall: {
-    width: 120,
-    height: 120,
-    bottom: -50,
-    left: -30,
+  headerOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(11, 34, 45, 0.3)",
   },
   avatarWrapper: {
     alignItems: "center",
